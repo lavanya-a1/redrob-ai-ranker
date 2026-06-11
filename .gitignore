@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+
+data/candidates.jsonl
+data/*.parquet
+output/
+
+.faiss/
+.chroma/
+
+.ipynb_checkpoints/
