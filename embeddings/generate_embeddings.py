@@ -1,60 +1,36 @@
 from sentence_transformers import SentenceTransformer
 import pandas as pd
 import numpy as np
-from tqdm import tqdm
-import os
 
+print("Loading candidates...")
 
-# -----------------------------
-# Load Processed Candidate Data
-# -----------------------------
-
-DATA_PATH = "data/processed_candidates.parquet"
-
-print("Loading processed candidates...")
-
-df = pd.read_parquet(DATA_PATH)
-
-print(f"Loaded {len(df)} candidates")
-
-
-# -----------------------------
-# Load Embedding Model
-# -----------------------------
-
-print("\nLoading embedding model...")
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-print("Model loaded successfully!")
-
-
-# -----------------------------
-# Generate Embeddings
-# -----------------------------
-
-texts = df["combined_text"].fillna("").tolist()
-
-print("\nGenerating embeddings...")
-
-embeddings = model.encode(
-    texts,
-    batch_size=64,
-    show_progress_bar=True,
-    convert_to_numpy=True
+df = pd.read_parquet(
+    "data/processed_candidates.parquet"
 )
 
+texts = df["candidate_text"].fillna("").tolist()
 
-# -----------------------------
-# Save Embeddings
-# -----------------------------
+print("Loading MiniLM...")
 
-OUTPUT_PATH = "data/candidate_embeddings.npy"
+model = SentenceTransformer(
+    "all-MiniLM-L6-v2"
+)
 
-np.save(OUTPUT_PATH, embeddings)
+embeddings = model.encode(
 
-print("\nEmbeddings saved successfully!")
+    texts,
 
-print(f"Shape : {embeddings.shape}")
+    batch_size=64,
 
-print(f"Saved at : {OUTPUT_PATH}")
+    show_progress_bar=True,
+
+    convert_to_numpy=True
+
+)
+
+np.save(
+    "data/candidate_embeddings.npy",
+    embeddings
+)
+
+print(embeddings.shape)
