@@ -99,4 +99,4 @@ if __name__ == "__main__":
         output_path = "data/processed_candidates.parquet"
         df.to_parquet(output_path, index=False)
         print(df.head(2))
-        print(f"\n✅ Saved processed data structures to: {output_path}")
+        print(f"\n✅ Saved processed data structures to: {output_path}") 
