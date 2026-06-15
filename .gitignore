@@ -1,13 +1,22 @@
+# Python Virtual Environment
 venv/
 __pycache__/
 *.pyc
 
-data/
-data/candidates.jsonl
-data/*.parquet
-output/
-
-.faiss/
-.chroma/
-
+# IDE Caches
 .ipynb_checkpoints/
+.vscode/
+
+# Data Trackers (Keep the folder structure, ignore the heavy binaries)
+data/candidates.jsonl
+data/candidate_embeddings.npy
+data/candidate_index.faiss
+data/*.parquet
+
+# Output Trackers (Ignore intermediate datasets, keep the final submission script target)
+output/top1000_candidates.parquet
+output/final_ranked_candidates.csv
+
+# Vector Database Caches (Just in case)
+.chroma/
+.faiss/
