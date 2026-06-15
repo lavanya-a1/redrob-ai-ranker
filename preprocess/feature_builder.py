@@ -320,6 +320,14 @@ def build_candidate_features(candidate):
 
             get_embedding_text(
                 candidate
-            )
+            ),
+            # --- HACKATHON HONEYPOT SANITY TRACKERS ---
+        "raw_career_history": 
+            candidate.get("career_history", []),
 
+        "years_of_experience_raw": 
+            candidate.get("profile", {}).get("years_of_experience", 0),
+
+        "expert_skills_count": 
+            sum(1 for skill in candidate.get("skills", []) if "expert" in str(skill.get("proficiency", "")).lower())
     }
