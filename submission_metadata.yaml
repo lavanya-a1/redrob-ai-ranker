@@ -1,0 +1,13 @@
+team_name: "Solo Sprint"
+primary_contact_name: "Adabala Lavanya Sri Sai Bhavani"
+primary_contact_email: "adabalalavanya01@gmail.com"
+primary_contact_phone: "+91 63040 93877"
+github_repository_url: "https://github.com/lavanya-a1/redrob-ai-ranker"
+sandbox_link: "https://redrob-ai-ranker-india.streamlit.app/"
+ai_tools_declared:
+  - Gemini
+  - ChatGPT
+compute_environment_summary: "Windows 11, 16GB RAM, Python 3.11"
+team_member_list:
+  - name: "Adabala Lavanya Sri Sai Bhavani"
+    email: "adabalalavanya01@gmail.com"
