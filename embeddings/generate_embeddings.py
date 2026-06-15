@@ -1,6 +1,6 @@
-from sentence_transformers import SentenceTransformer
 import pandas as pd
 import numpy as np
+from sentence_transformers import SentenceTransformer
 
 print("Loading candidates...")
 
@@ -8,13 +8,15 @@ df = pd.read_parquet(
     "data/processed_candidates.parquet"
 )
 
-texts = df["candidate_text"].fillna("").tolist()
+texts = df["embedding_text"].fillna("").tolist()
 
 print("Loading MiniLM...")
 
 model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
+
+print("Generating embeddings...")
 
 embeddings = model.encode(
 
@@ -24,13 +26,19 @@ embeddings = model.encode(
 
     show_progress_bar=True,
 
-    convert_to_numpy=True
+    convert_to_numpy=True,
+
+    normalize_embeddings=True
 
 )
 
 np.save(
+
     "data/candidate_embeddings.npy",
+
     embeddings
+
 )
 
+print("Saved candidate_embeddings.npy")
 print(embeddings.shape)

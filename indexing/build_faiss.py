@@ -1,29 +1,30 @@
-import faiss
 import numpy as np
+import faiss
 
-# Load embeddings
-embeddings = np.load("data/candidate_embeddings.npy")
+print("Loading embeddings...")
 
-print("Embeddings Shape:", embeddings.shape)
+embeddings = np.load(
+    "data/candidate_embeddings.npy"
+)
 
-# Convert to float32
-embeddings = embeddings.astype("float32")
+embeddings = embeddings.astype(np.float32)
 
-# Dimension
+print("Shape:", embeddings.shape)
+
 dimension = embeddings.shape[1]
 
-# Create Index
+# Cosine similarity (embeddings already normalized)
 index = faiss.IndexFlatIP(dimension)
 
-# Normalize vectors for cosine similarity
-faiss.normalize_L2(embeddings)
+print("Building FAISS index...")
 
-# Add embeddings
 index.add(embeddings)
 
+faiss.write_index(
+    index,
+    "data/candidate_index.faiss"
+)
+
+print("FAISS index saved successfully!")
+
 print("Total vectors:", index.ntotal)
-
-# Save index
-faiss.write_index(index, "data/candidate_index.faiss")
-
-print("FAISS Index Saved!")

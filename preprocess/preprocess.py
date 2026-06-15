@@ -1,73 +1,116 @@
 import json
+import pandas as pd
 from tqdm import tqdm
 
 
-def load_candidates(filepath):
-    candidates = []
+def build_embedding_text(candidate):
 
-    with open(filepath, "r", encoding="utf-8") as f:
-        for line in tqdm(f):
-            candidates.append(json.loads(line))
-
-    return candidates
-
-def extract_skill_text(skills):
-
-    names = []
-
-    for skill in skills:
-        names.append(skill["name"])
-
-    return " ".join(names)
-
-def extract_career_text(career_history):
+    profile = candidate["profile"]
 
     text = ""
 
-    for job in career_history:
+    # Profile
+
+    text += profile["headline"] + " "
+
+    text += profile["summary"] + " "
+
+    text += profile["current_title"] + " "
+
+    text += profile["current_industry"] + " "
+
+    # Career
+
+    for job in candidate["career_history"]:
 
         text += job["title"] + " "
 
+        text += job["industry"] + " "
+
         text += job["description"] + " "
 
-    return text
+    # Skills
 
-def extract_education_text(education):
+    for skill in candidate["skills"]:
 
-    text = ""
+        text += skill["name"] + " "
 
-    for edu in education:
+        text += skill["proficiency"] + " "
+
+    # Education
+
+    for edu in candidate["education"]:
 
         text += edu["degree"] + " "
 
         text += edu["field_of_study"] + " "
 
-    return text
+    return text.lower()
 
-def build_candidate_text(candidate):
 
-    profile = candidate["profile"]
+def load_candidates(path):
 
-    headline = profile["headline"]
+    rows = []
 
-    summary = profile["summary"]
+    with open(path, "r", encoding="utf-8") as f:
 
-    skills = extract_skill_text(candidate["skills"])
+        for line in tqdm(f):
 
-    career = extract_career_text(candidate["career_history"])
+            candidate = json.loads(line)
 
-    education = extract_education_text(candidate["education"])
+            rows.append({
 
-    combined = f"""
-    {headline}
+                "candidate_id":
 
-    {summary}
+                    candidate["candidate_id"],
 
-    {career}
+                "embedding_text":
 
-    {skills}
+                    build_embedding_text(candidate),
 
-    {education}
-    """
+                "profile":
 
-    return combined
+                    candidate["profile"],
+
+                "career_history":
+
+                    candidate["career_history"],
+
+                "skills":
+
+                    candidate["skills"],
+
+                "education":
+
+                    candidate["education"],
+
+                "redrob_signals":
+
+                    candidate["redrob_signals"]
+
+            })
+
+    return pd.DataFrame(rows)
+
+
+if __name__ == "__main__":
+
+    df = load_candidates(
+
+        "data/candidates.jsonl"
+
+    )
+
+    df.to_parquet(
+
+        "data/processed_candidates.parquet",
+
+        index=False
+
+    )
+
+    print(df.head())
+
+    print()
+
+    print("Saved processed_candidates.parquet")
